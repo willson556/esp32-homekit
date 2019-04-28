@@ -97,7 +97,7 @@ CFLAGS = \
     -nostdlib                   \
     -ggdb                       \
     -Os                         \
-    -DNDEBUG                    \
+    -DDEBUG                    \
     -std=gnu99                  \
     -Wno-old-style-declaration  \
     $(LWIP_INCDIRS)             \

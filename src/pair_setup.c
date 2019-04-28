@@ -61,13 +61,15 @@ static int _subtlv_decrypt(enum hkdf_key_type htype,
     *subtlv = malloc(encrypted_tlv->length);
     int err = chacha20_poly1305_decrypt(cptype, subtlv_key, NULL, 0,
             (uint8_t*)&encrypted_tlv->value, encrypted_tlv->length, *subtlv);
-    tlv_decoded_item_free(encrypted_tlv);
+
     if (err < 0) {
         printf("chacha20_poly1305_decrypt failed\n");
         free(*subtlv);
         return -1;
     }
-    *subtlv_length = strlen((char*)*subtlv);
+    //*subtlv_length = strlen((char*)*subtlv);
+    *subtlv_length = encrypted_tlv->length;
+    tlv_decoded_item_free(encrypted_tlv);
 
     return 0;
 }

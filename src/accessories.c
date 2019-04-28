@@ -63,6 +63,12 @@ struct hap_attr_characteristic {
     void* (*read)(void* arg);
     void (*write)(void* arg, void* value, int value_len);
     void (*event)(void* arg, void* ev_handle, bool enable);
+
+    bool override_max_value;
+    void* max_value;
+
+    bool override_min_value;
+    void* min_value;
 };
 
 
@@ -190,6 +196,14 @@ static cJSON* _attr_characterisic_to_json(struct hap_attr_characteristic* c)
     else {
         if (c->type != HAP_CHARACTER_IDENTIFY)
             cJSON_AddNullToObject(root, "value");
+    }
+
+    if (c->override_max_value) {
+        cJSON_AddItemToObject(root, "maxValue", _value_to_formatized_json(c, c->max_value));
+    }
+
+    if (c->override_min_value) {
+        cJSON_AddItemToObject(root, "minValue", _value_to_formatized_json(c, c->min_value));
     }
 
     return root;
@@ -860,7 +874,7 @@ static void _characteristic_properties_define(struct hap_attr_characteristic* c)
 }
 
 void* hap_acc_service_and_characteristics_add(void* _attr_a,
-        enum hap_service_type type, struct hap_characteristic* cs, int nr_cs) 
+        enum hap_service_type type, struct hap_characteristic_ex* cs, int nr_cs) 
 {
     struct hap_acc_accessory* attr_a = _attr_a;
     struct hap_attr_service* attr_s = calloc(1, sizeof(struct hap_attr_service) + sizeof(struct hap_attr_characteristic) * nr_cs);
@@ -871,13 +885,19 @@ void* hap_acc_service_and_characteristics_add(void* _attr_a,
 
     struct hap_attr_characteristic* c = (struct hap_attr_characteristic*)&attr_s->characters;
     for (int i=0; i<nr_cs; i++) {
-        c->callback_arg = cs[i].callback_arg;
+        c->callback_arg = cs[i].base.callback_arg;
         c->iid = ++attr_a->last_iid;
-        c->type = cs[i].type;
-        c->initial_value = cs[i].initial_value;
-        c->read = cs[i].read;
-        c->write = cs[i].write;
-        c->event = cs[i].event;
+        c->type = cs[i].base.type;
+        c->initial_value = cs[i].base.initial_value;
+        c->read = cs[i].base.read;
+        c->write = cs[i].base.write;
+        c->event = cs[i].base.event;
+        
+        c->override_max_value = cs[i].override_max_value;
+        c->max_value = cs[i].max_value;
+        c->override_min_value = cs[i].override_min_value;
+        c->min_value = cs[i].min_value;
+
         c->aid = attr_a->aid;
         _characteristic_properties_define(c);
         c++;

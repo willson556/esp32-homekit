@@ -190,6 +190,15 @@ struct hap_characteristic {
     void (*event)(void* arg, void* ev_handle, bool enable);
 };
 
+struct hap_characteristic_ex {
+    struct hap_characteristic base;
+    bool override_max_value;
+    void* max_value;
+
+    bool override_min_value;
+    void* min_value;
+};
+
 typedef struct {
     void (*hap_object_init)(void* arg);
 } hap_accessory_callback_t;
@@ -198,6 +207,8 @@ int hap_event_response(void* acc_instance, void* ev_handle, void* value);
 void* hap_accessory_add(void* acc_instance);
 void hap_service_and_characteristics_add(void* acc_instance, void* accssories_objects,
         enum hap_service_type type, struct hap_characteristic* cs, int nr_cs);
+void hap_service_and_characteristics_ex_add(void* acc_instance, void* accssories_objects,
+        enum hap_service_type type, struct hap_characteristic_ex* cs, int nr_cs);
 
 void* hap_accessory_register(char* name, char* id, char* pincode, char* vendor, enum hap_accessory_category category,
                         int port, uint32_t config_number, void* callback_arg, hap_accessory_callback_t* callback);

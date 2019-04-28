@@ -420,7 +420,22 @@ void* hap_accessory_add(void* acc_instance)
 void hap_service_and_characteristics_add(void* acc_instance, void* acc_obj,
         enum hap_service_type type, struct hap_characteristic* cs, int nr_cs) 
 {
-    hap_acc_service_and_characteristics_add(acc_obj, type, cs, nr_cs);
+    struct hap_characteristic_ex *cs_ex = calloc(nr_cs, sizeof(struct hap_characteristic_ex));
+
+    for (size_t i=0; i < nr_cs; ++i) {
+        cs_ex[i].base = cs[i];
+        cs_ex[i].override_max_value = false;
+        cs_ex[i].override_min_value = false;
+    }
+
+    hap_service_and_characteristics_ex_add(acc_instance, acc_obj, type, cs_ex, nr_cs);
+    free(cs_ex);
+}
+
+void hap_service_and_characteristics_ex_add(void* acc_instance, void* acc_obj,
+        enum hap_service_type type, struct hap_characteristic_ex* cs, int nr_cs)
+{
+    hap_acc_service_and_characteristics_add(acc_obj, type, cs, nr_cs);    
 }
 
 void* hap_accessory_register(char* name, char* id, char* pincode, char* vendor, enum hap_accessory_category category,
