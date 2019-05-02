@@ -40,10 +40,10 @@ static int _decrypt(struct hap_connection* hc, char* encrypted, int len, char* d
     if (*saveptr == NULL) {
         ptr = (uint8_t*)encrypted;
     }
-    else if (*saveptr < encrypted + len) {
+    else if (*saveptr < (uint8_t*)encrypted + len) {
         ptr = *saveptr;
     }
-    else if (*saveptr == encrypted + len){
+    else if (*saveptr == (uint8_t*)encrypted + len){
         ESP_LOGI(TAG, "_decrypt end %d", (int)((char*)*saveptr - encrypted));
         return 0;
     }
@@ -70,7 +70,7 @@ static int _decrypt(struct hap_connection* hc, char* encrypted, int len, char* d
 
 static void _encrypted_msg_recv(void* connection, struct mg_connection* nc, char* msg, int len) 
 {
-    char* decrypted = calloc(1, len);
+    char* decrypted = calloc(sizeof(char), len);
     if (decrypted == NULL) {
         ESP_LOGE(TAG, "calloc failded. size:%d", len);
         return;

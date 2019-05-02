@@ -117,7 +117,7 @@ static cJSON* _value_to_formatized_json(struct hap_attr_characteristic* c, void*
 {
     switch (c->format) {
         case FORMAT_BOOL:
-            return cJSON_CreateBool(value);
+            return cJSON_CreateBool((cJSON_bool)value);
         case FORMAT_UINT8:
         case FORMAT_UINT32:
         case FORMAT_UINT64:
@@ -358,6 +358,8 @@ int hap_acc_characteristic_put(struct hap_accessory* a, struct hap_connection* h
             c->write(c->callback_arg, (void*)value_json->valueint, 0);
         }
     }
+
+    cJSON_Delete(root);
 
     *res_header = calloc(1, strlen(header_204_fmt) + 1);
     strcpy(*res_header, header_204_fmt);
