@@ -355,7 +355,12 @@ int hap_acc_characteristic_put(struct hap_accessory* a, struct hap_connection* h
 
         cJSON* value_json = cJSON_GetObjectItem(char_json, "value");
         if (value_json && c->write) {
-            c->write(c->callback_arg, (void*)value_json->valueint, 0);
+            if (c->format == FORMAT_FLOAT) {
+                c->write(c->callback_arg, (void*)((int)(value_json->valuedouble * 100)), 0);
+            }
+            else {
+                c->write(c->callback_arg, (void*)value_json->valueint, 0);
+            }
         }
     }
 
