@@ -69,6 +69,9 @@ struct hap_attr_characteristic {
 
     bool override_min_value;
     void* min_value;
+
+    bool override_min_step;
+    void* min_step;
 };
 
 
@@ -204,6 +207,10 @@ static cJSON* _attr_characterisic_to_json(struct hap_attr_characteristic* c)
 
     if (c->override_min_value) {
         cJSON_AddItemToObject(root, "minValue", _value_to_formatized_json(c, c->min_value));
+    }
+
+    if (c->override_min_step) {
+        cJSON_AddItemToObject(root, "minStep", _value_to_formatized_json(c, c->min_step));
     }
 
     return root;
@@ -904,6 +911,8 @@ void* hap_acc_service_and_characteristics_add(void* _attr_a,
         c->max_value = cs[i].max_value;
         c->override_min_value = cs[i].override_min_value;
         c->min_value = cs[i].min_value;
+        c->override_min_step = cs[i].override_min_step;
+        c->min_step = cs[i].min_step;
 
         c->aid = attr_a->aid;
         _characteristic_properties_define(c);

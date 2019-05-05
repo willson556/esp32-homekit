@@ -197,6 +197,9 @@ struct hap_characteristic_ex {
 
     bool override_min_value;
     void* min_value;
+
+    bool override_min_step;
+    void* min_step;
 };
 
 typedef struct {
