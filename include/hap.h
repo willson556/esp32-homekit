@@ -200,6 +200,10 @@ struct hap_characteristic_ex {
 
     bool override_min_step;
     void* min_step;
+
+    bool override_valid_values;
+    size_t num_valid_values;
+    int* valid_values;
 };
 
 typedef struct {

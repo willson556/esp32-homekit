@@ -72,6 +72,10 @@ struct hap_attr_characteristic {
 
     bool override_min_step;
     void* min_step;
+
+    bool override_valid_values;
+    size_t num_valid_values;
+    int* valid_values;
 };
 
 
@@ -211,6 +215,11 @@ static cJSON* _attr_characterisic_to_json(struct hap_attr_characteristic* c)
 
     if (c->override_min_step) {
         cJSON_AddItemToObject(root, "minStep", _value_to_formatized_json(c, c->min_step));
+    }
+
+    if (c->override_valid_values) {
+        cJSON* valid_values = cJSON_CreateIntArray(c->valid_values, c->num_valid_values);
+        cJSON_AddItemToObject(root, "valid-values", valid_values);
     }
 
     return root;
@@ -909,10 +918,23 @@ void* hap_acc_service_and_characteristics_add(void* _attr_a,
         
         c->override_max_value = cs[i].override_max_value;
         c->max_value = cs[i].max_value;
+
         c->override_min_value = cs[i].override_min_value;
         c->min_value = cs[i].min_value;
+
         c->override_min_step = cs[i].override_min_step;
         c->min_step = cs[i].min_step;
+
+        if (cs[i].override_valid_values && cs[i].valid_values) {
+            c->override_valid_values = true;
+            c->num_valid_values = cs[i].num_valid_values;
+            c->valid_values = calloc(c->num_valid_values, sizeof(int));
+            memcpy(c->valid_values, cs[i].valid_values, c->num_valid_values * sizeof(int));
+        } else {
+            c->override_valid_values = false;
+            c->num_valid_values = 0;
+            c->valid_values = NULL;
+        }
 
         c->aid = attr_a->aid;
         _characteristic_properties_define(c);
