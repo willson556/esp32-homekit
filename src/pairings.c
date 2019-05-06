@@ -14,9 +14,9 @@ static const char* header_fmt =
     "Content-Type: application/pairing+tlv8\r\n"
     "\r\n";
 
-static uint8_t _state_get(uint8_t* device_msg, int device_msg_length)
+static uint8_t _state_get(const uint8_t* device_msg, int device_msg_length)
 {
-    struct tlv* state_tlv = tlv_decode((uint8_t*)device_msg, device_msg_length, 
+    struct tlv* state_tlv = tlv_decode((const uint8_t*)device_msg, device_msg_length, 
             HAP_TLV_TYPE_STATE);
     if (state_tlv == NULL) {
         printf("tlv_decode failed. type:%d\n", HAP_TLV_TYPE_STATE);
@@ -130,7 +130,7 @@ static int _remove(void* iosdevices, uint8_t* device_msg, int device_msg_length,
     return 0;
 }
 
-int pairings_do(void* iosdevices, char* req_body, int req_body_len, 
+int pairings_do(void* iosdevices, const char* req_body, int req_body_len, 
         char** res_header, int* res_header_len, char** res_body, int* res_body_len)
 {
     uint8_t state = _state_get((uint8_t*)req_body, req_body_len);

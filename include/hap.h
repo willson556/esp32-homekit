@@ -217,7 +217,7 @@ void hap_service_and_characteristics_add(void* acc_instance, void* accssories_ob
 void hap_service_and_characteristics_ex_add(void* acc_instance, void* accssories_objects,
         enum hap_service_type type, struct hap_characteristic_ex* cs, int nr_cs);
 
-void* hap_accessory_register(char* name, char* id, char* pincode, char* vendor, enum hap_accessory_category category,
+void* hap_accessory_register(const char* name, const char* id, const char* pincode, const char* vendor, enum hap_accessory_category category,
                         int port, uint32_t config_number, void* callback_arg, hap_accessory_callback_t* callback);
 
 

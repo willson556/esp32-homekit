@@ -18,7 +18,7 @@
          pos <= bound; \
          pos += TLV_HEADER_LENGTH + pos[TLV_LENGTH_INDEX])
 
-static uint8_t* _item_find(uint8_t* start, int length, uint8_t type) 
+static uint8_t* _item_find(const uint8_t* start, int length, uint8_t type) 
 {
     uint8_t* pos;
     tlv_for_each(pos, start, start + length -1) {
@@ -46,7 +46,7 @@ static int _item_length(uint8_t* item, uint8_t* bound)
     return tlv_length;
 }
 
-static struct tlv* _defragmentation(uint8_t* item, uint8_t* bound) 
+static struct tlv* _defragmentation(const uint8_t* item, uint8_t* bound) 
 {
     int tlv_item_length = _item_length(item, bound);
     //printf("[TLV] tlv_item_length:%d\n", tlv_item_length);
@@ -73,7 +73,7 @@ static struct tlv* _defragmentation(uint8_t* item, uint8_t* bound)
     return tlv;
 }
 
-struct tlv* tlv_decode(uint8_t* msg, int msg_len, uint8_t type)
+struct tlv* tlv_decode(const uint8_t* msg, int msg_len, uint8_t type)
 {
     uint8_t* item = _item_find(msg, msg_len, type);
     if (item == NULL) {

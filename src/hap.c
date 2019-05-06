@@ -438,7 +438,7 @@ void hap_service_and_characteristics_ex_add(void* acc_instance, void* acc_obj,
     hap_acc_service_and_characteristics_add(acc_obj, type, cs, nr_cs);    
 }
 
-void* hap_accessory_register(char* name, char* id, char* pincode, char* vendor, enum hap_accessory_category category,
+void* hap_accessory_register(const char* name, const char* id, const char* pincode, const char* vendor, enum hap_accessory_category category,
                         int port, uint32_t config_number, void* callback_arg, hap_accessory_callback_t* callback)
 {
     if (_hap_desc->nr_accessory != 0) {
