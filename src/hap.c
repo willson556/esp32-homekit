@@ -20,8 +20,6 @@
 #include "pair_verify.h"
 #include "pairings.h"
 
-//#define DEBUG
-
 #define TAG "HAP"
 
 struct hap {
@@ -225,8 +223,9 @@ static void _plain_msg_recv(void* connection, struct mg_connection* nc, char* ms
         hap_acc_accessories_do(a, &res_header, &res_header_len, &res_body, &body_len);
 #ifdef DEBUG
         {
-            ESP_LOGI(TAG, "RESPONSE");
-            ESP_LOGI(TAG, "%s%s", res_header, res_body);
+            ESP_LOGI(TAG, "ACC GET RESPONSE");
+            ESP_LOGI(TAG, "Header:\n %s", res_header);
+            ESP_LOGI(TAG, "Body:\n %s", res_body);
         }
 #endif
         encrypt_send(nc, hc, res_header, res_header_len, res_body, body_len);

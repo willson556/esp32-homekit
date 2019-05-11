@@ -3,6 +3,7 @@ COMPONENT_ADD_INCLUDEDIRS := include
 COMPONENT_PRIV_INCLUDEDIRS := wolfssl src
 
 HOMEKIT_OBJS := $(patsubst %.c,%.o,$(wildcard $(COMPONENT_PATH)/src/*.c))
+HOMEKIT_OBJS += $(patsubst %.cpp,%.o,$(wildcard $(COMPONENT_PATH)/src/*.cpp))
 HOMEKIT_OBJS := $(patsubst $(COMPONENT_PATH)/%,%,$(HOMEKIT_OBJS))
 
 WOLFSSL_OBJS := \
@@ -103,3 +104,5 @@ CFLAGS = \
     $(LWIP_INCDIRS)             \
     $(FREERTOS_INCDIRS)         \
     $(WOLFSSL_SETTINGS)
+
+CXXFLAGS += -std=c++17 -Wno-missing-field-initializers
